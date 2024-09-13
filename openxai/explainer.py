@@ -1,6 +1,6 @@
 # Explainers
 from openxai.explainers import Gradient, IntegratedGradients,\
-    InputTimesGradient, SmoothGrad, LIME, SHAPExplainerC, RandomBaseline
+    InputTimesGradient, SmoothGrad, LIME, SHAPExplainerC, RandomBaseline, PFI
 
 explainers_dict = {
     'grad': Gradient,
@@ -9,7 +9,8 @@ explainers_dict = {
     'ig': IntegratedGradients,
     'shap': SHAPExplainerC,
     'lime': LIME,
-    'control': RandomBaseline
+    'control': RandomBaseline,
+    'pfi': PFI
 }
 
 def Explainer(method, model, param_dict={}):

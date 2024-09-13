@@ -6,5 +6,6 @@ from .catalog import (
     InputTimesGradient,
     LIME,
     SHAPExplainerC,
-    RandomBaseline
+    RandomBaseline,
+    PFI
 )
