@@ -3,11 +3,11 @@
         "lr", "ann"
     ],
     "data_names": [
-       "adult", "compas", "gaussian", "german",
-       "gmsc", "heart", "heloc", "pima"
+    "adult", "compas", "gaussian", "german",
+    "gmsc", "heart", "heloc", "pima", "synthetic"
     ],
     "methods": [
-        "control", "grad", "ig", "itg", "sg", "shap", "lime", "pfi"
+        "pfi"
     ],
     "metrics": [
         "PRA", "RC",
@@ -17,6 +17,11 @@
     ],
     "n_test_samples": 1000,
     "explainers": {
+        "pfi": {
+            "n_repeats": 5,
+            "seed": 0,
+            "metric": "accuracy"
+        },
         "control": {
             "seed": 0
         },
@@ -76,6 +81,11 @@
         "scaler": "minmax",
         "seed": 0, 
         "warmup": 5,
+        "synthetic": {
+            "batch_size": 32,
+            "pos_class_weight": 0.5,
+            "mean_pred_bound": 0.5
+        },
         "adult": {
             "batch_size": 256,
             "pos_class_weight": 0.55,

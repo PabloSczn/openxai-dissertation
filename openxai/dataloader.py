@@ -25,9 +25,13 @@ feature_types = {
     'compas': ['c', 'd', 'c', 'c', 'd', 'd', 'd'], 'gaussian': ['c'] * 20,
     'gmsc': ['c'] * 10, 'heloc': ['c'] * 23, 'pima': ['c'] * 8,
     'heart': ['d', 'c', 'c', 'd', 'c'] + ['d'] * 4 + ['c'] * 6,
+    'synthetic': ['c'] * 20
 }
-labels = {'adult': 'income', 'compas': 'risk', 'gaussian': 'target', 'german': 'credit-risk',
-          'gmsc': 'SeriousDlqin2yrs', 'heart': 'TenYearCHD', 'heloc': 'RiskPerformance', 'pima': 'Outcome'}
+labels = {
+    'adult': 'income', 'compas': 'risk', 'gaussian': 'target', 'german': 'credit-risk',
+    'gmsc': 'SeriousDlqin2yrs', 'heart': 'TenYearCHD', 'heloc': 'RiskPerformance',
+    'pima': 'Outcome', 'synthetic': 'target'
+}
 
 class TabularDataLoader(data.Dataset):
     def __init__(self, path, filename, label, download=False, scale='minmax'):
@@ -133,7 +137,7 @@ def ReturnLoaders(data_name, download=False, batch_size=32, scaler='minmax'):
     return trainloader, testloader
 
 def ReturnTrainTestX(data_name, n_test=None, n_train=None, download=False,
-                             float_tensor=False, return_feature_metadata=False):
+                             float_tensor=False, return_feature_metadata=False, return_labels=False):
     """
     Load training and test datasets as DataLoader objects
     :param data_name: string with name of dataset
@@ -151,5 +155,18 @@ def ReturnTrainTestX(data_name, n_test=None, n_train=None, download=False,
         X_test = torch.FloatTensor(X_test)
         X_train = torch.FloatTensor(X_train)
     if return_feature_metadata:
-        return X_train, X_test, trainloader.dataset.feature_metadata
-    return X_train, X_test
+        feature_metadata = trainloader.dataset.feature_metadata
+    if return_labels:
+        y_test = testloader.dataset.targets.to_numpy()
+        y_train = trainloader.dataset.targets.to_numpy()
+        y_test = y_test[:n_test] if n_test is not None else y_test
+        y_train = y_train[:n_train] if n_train is not None else y_train
+        if return_feature_metadata:
+            return X_train, X_test, y_train, y_test, feature_metadata
+        else:
+            return X_train, X_test, y_train, y_test
+    else:
+        if return_feature_metadata:
+            return X_train, X_test, feature_metadata
+        else:
+            return X_train, X_test

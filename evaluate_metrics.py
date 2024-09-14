@@ -84,6 +84,11 @@ if __name__ == '__main__':
 
             # Loop over explanation methods
             for method in methods:
+                '''
+                Temporal test to test only pfi temporarily
+                '''
+                if method != 'pfi':
+                    continue
                 # Initialize trackers
                 now = time.time()
                 print(f"Model: {model_name}, Data: {data_name}, Explainer: {method} ({exp_num}/{num_exps})"+\
