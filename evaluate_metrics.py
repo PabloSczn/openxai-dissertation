@@ -98,8 +98,9 @@ if __name__ == '__main__':
                 # Loop over metrics
                 for metric in metrics:
                     # Skip invalid combinations
-                    if utils.invalid_model_metric_combination(model_name, metric):
-                        print(f"Skipping {metric} for {model_name}")
+                    if utils.invalid_model_metric_combination(model_name, metric) or \
+                    utils.invalid_method_metric_combination(method, metric):
+                        print(f"Skipping {metric} for model {model_name} and method {method}")
                         continue
 
                     # Evaluate metric
