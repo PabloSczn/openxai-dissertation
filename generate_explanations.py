@@ -42,12 +42,6 @@ if __name__ == '__main__':
 
             # Loop over explanation methods
             for method in methods:
-                '''
-                Temporal test to test only pfi temporarily
-                '''
-                if method != 'pfi':
-                    continue
-
                 print(f'Computing explanations for {method} (elapsed time: {time.time() - start_time:.2f}s)')
                 param_dict = utils.fill_param_dict(method, config['explainers'][method], X_train)
                 
