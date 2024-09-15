@@ -69,6 +69,19 @@ def invalid_model_metric_combination(model_name, metric):
     }
     return metric in invalid_combinations[model_name]
 
+def invalid_method_metric_combination(method, metric):
+    """
+    Check if the method-metric combination is invalid.
+    :param method: str, name of the explanation method
+    :param metric: str, name of the evaluation metric
+    :return: bool
+    """
+    invalid_combinations = {
+        'pfi': ['RIS', 'RRS', 'ROS'],  # PFI is incompatible with stability metrics
+        # Add other invalid combinations if necessary
+    }
+    return metric in invalid_combinations.get(method, [])
+
 def load_config(config_path):
     """
     Loads the configuration file

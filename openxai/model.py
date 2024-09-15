@@ -7,7 +7,7 @@ import copy
 import requests
 from sklearn.metrics import f1_score, accuracy_score
 from openxai.dataloader import ReturnLoaders
-from openxai.experiment_utils import print_summary
+from openxai.experiment_utils import print_summary, load_config
 
 activation_functions = {'relu': nn.ReLU(), 'leaky_relu': nn.LeakyReLU(),
                         'sigmoid': nn.Sigmoid(), 'tanh': nn.Tanh()}
@@ -32,7 +32,7 @@ def LoadModel(data_name: str, ml_model, pretrained: bool = True):
     :param pretrained: boolean, whether to load a pretrained model
     :return: model
     """
-    if pretrained:
+    if pretrained and data_name in dataverse_ids.get(ml_model, {}):
         model_path = './models/pretrained/'
         os.makedirs(model_path, exist_ok=True)
         if data_name in dataverse_ids[ml_model]:
@@ -50,8 +50,33 @@ def LoadModel(data_name: str, ml_model, pretrained: bool = True):
             raise NotImplementedError(
                 f'The current version of >LoadModel< does not support this data set for {ml_model.upper()} models.')
     else:
-        raise NotImplementedError(
-             'The current version of >LoadModel< does not support training a ML model from scratch, yet.')
+        # Train model from scratch
+        # Load data
+        trainloader, testloader = ReturnLoaders(data_name, download=False)
+        input_size = trainloader.dataset.data.shape[-1]
+        # Define the model
+        if ml_model == 'ann':
+            model = ArtificialNeuralNetwork(input_size, [100, 100], n_class=2)
+        elif ml_model == 'lr':
+            model = LogisticRegression(input_size, n_class=2)
+        else:
+            print('Invalid model type')
+            exit(0)
+        # Train the model
+        config = load_config('experiment_config.json')
+        training_params = config['training'].get(data_name, {})
+        model, best_acc, best_epoch = train_model(
+            ml_model, data_name,
+            learning_rate=training_params.get('learning_rate', 0.001),
+            epochs=training_params.get('epochs', 100),
+            batch_size=training_params.get('batch_size', 32),
+            scaler=training_params.get('scaler', 'minmax'),
+            seed=training_params.get('seed', 0),
+            pos_class_weight=training_params.get('pos_class_weight', 0.5),
+            mean_prediction_bound=training_params.get('mean_pred_bound', 1.0),
+            warmup=training_params.get('warmup', 5),
+            verbose=True
+        )
     return model
 
 

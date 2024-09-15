@@ -1,6 +1,6 @@
-
 # Utils
 import numpy as np
+import pandas as pd
 import time
 import copy
 import warnings; warnings.filterwarnings("ignore")
@@ -64,24 +64,27 @@ if __name__ == '__main__':
     # Initialize trackers
     exp_num, num_exps = 1, len(model_names) * len(data_names) * len(methods)
     start_time = time.time()
+    
+    # List to store the results
+    results = []
 
     # Loop over models
     for model_name in model_names:
         start_time_model = time.time()
-
+    
         # Loop over datasets
         for data_name in data_names:
             start_time_data = time.time()
             metrics_folder_name = f'metric_evals/{model_name}_{data_name}/'
             utils.make_directory(metrics_folder_name)
-
+    
             # Load data and model
             X_train, X_test, feature_metadata =\
                 ReturnTrainTestX(data_name, n_test=n_test_samples, float_tensor=True,
                                  return_feature_metadata=True)
             model = LoadModel(data_name, model_name)
             predictions = model(X_test).argmax(-1)
-
+    
             # Loop over explanation methods
             for method in methods:
                 # Initialize trackers
@@ -89,26 +92,45 @@ if __name__ == '__main__':
                 print(f"Model: {model_name}, Data: {data_name}, Explainer: {method} ({exp_num}/{num_exps})"+\
                       f"{int(now - start_time)}s total, {int(now - start_time_model)}s on model, {int(now - start_time_data)}s on dataset)")
                 exp_num += 1
-
+    
                 # Loop over metrics
                 for metric in metrics:
                     # Skip invalid combinations
-                    if utils.invalid_model_metric_combination(model_name, metric):
-                        print(f"Skipping {metric} for {model_name}")
+                    if utils.invalid_model_metric_combination(model_name, metric) or \
+                       utils.invalid_method_metric_combination(method, metric):
+                        print(f"Skipping {metric} for model {model_name} and method {method}")
                         continue
-
+    
                     # Evaluate metric
                     evaluator = Evaluator(model, metric=metric)
                     param_dict, param_str = _construct_param_dict(config, metric)
                     score, mean_score = evaluator.evaluate(**param_dict)
-
+    
                     # Print results
                     std_err = np.std(score) / np.sqrt(len(score))
                     print(f"{metric}: {mean_score:.3f} \u00B1 {std_err:.3f}")
                     if metric in stability_metrics:
                         log_mu, log_std = np.log(mean_score), np.log(std_err)
                         print(f"log({metric}): {log_mu:.3f} \u00B1 {log_std:.3f}")
-
+    
                     # Save results
                     np.save(metrics_folder_name + f'{metric}_{method}_{n_test_samples}{param_str}.npy', score)
+
+                    # Append results to the list
+                    result = {
+                        'Model': model_name,
+                        'Data': data_name,
+                        'Method': method,
+                        'Metric': metric,
+                        'Mean': mean_score,
+                        'StdErr': std_err,
+                        'ParamStr': param_str
+                    }
+                    results.append(result)
                     print()
+
+    # After all evaluations, save results to a CSV file
+    results_df = pd.DataFrame(results)
+    results_csv_path = 'evaluation_results.csv'
+    results_df.to_csv(results_csv_path, index=False)
+    print(f"All evaluation results have been saved to {results_csv_path}")
