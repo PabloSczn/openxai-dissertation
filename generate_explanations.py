@@ -52,12 +52,6 @@ if __name__ == '__main__':
                 print(f'Computing explanations for {method} (elapsed time: {time.time() - start_time:.2f}s)')
                 param_dict = utils.fill_param_dict(method, config['explainers'][method], X_train)
 
-                '''
-                Temporal test PDP
-                '''
-                if method != 'pdp':
-                    continue
-
                 if method == 'pfi':
                     # PFI needs inputs and labels
                     param_dict['inputs'] = X_test
