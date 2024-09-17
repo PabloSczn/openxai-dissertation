@@ -42,25 +42,27 @@ class PDP(BaseExplainer):
 
     def get_explanations(self, x: torch.FloatTensor, label=None) -> torch.FloatTensor:
         """
-        Compute the PDP explanations for the input x.
-
+        Compute the PDP explanations for the input x and summarize them into feature importance scores.
+        
         :param x: The input data (not used in PDP).
         :param label: Not used in PDP.
-        :return: A torch.FloatTensor containing the partial dependence values for each feature.
+        :return: A torch.FloatTensor containing the feature importance scores.
         """
         n_features = self.inputs.shape[1]
-        pdp_values = []
-
+        importance_scores = []
+        
         # Compute PDP for each feature
         for feature_idx in range(n_features):
             grid = self.feature_grids[feature_idx]
             pdp = self._compute_pdp_for_feature(feature_idx, grid)
-            pdp_values.append(pdp)
-
-        # Stack PDP values for all features
-        # Since PDP is a global method, we can return the mean PDP values
-        pdp_values = torch.stack(pdp_values, dim=0)
-        return pdp_values  # Shape: (n_features, grid_resolution)
+            # Summarize PDP into a single importance score per feature
+            importance = pdp.max() - pdp.min()  # Alternatively, use pdp.std() or pdp.var()
+            importance_scores.append(importance.item())
+        
+        # Return the importance scores for each instance in x
+        importance_scores = torch.FloatTensor(importance_scores)
+        explanations = importance_scores.unsqueeze(0).repeat(x.size(0), 1)
+        return explanations
 
     def _compute_pdp_for_feature(self, feature_idx, grid):
         """

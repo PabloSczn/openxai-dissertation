@@ -7,7 +7,7 @@
     "gmsc", "heart", "heloc", "pima", "synthetic"
     ],
     "methods": [
-        "lime", "shap", "pfi", "pdp"
+        "pdp"
     ],
     "metrics": [
         "PRA", "RC",
