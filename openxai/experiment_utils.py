@@ -78,7 +78,7 @@ def invalid_method_metric_combination(method, metric):
     """
     invalid_combinations = {
         'pfi': ['RIS', 'RRS', 'ROS'],  # PFI is incompatible with stability metrics
-        # Add other invalid combinations if necessary
+        'pdp': ['FA', 'RA', 'SA', 'SRA', 'PGU', 'PGI', 'RIS', 'RRS', 'ROS']
     }
     return metric in invalid_combinations.get(method, [])
 

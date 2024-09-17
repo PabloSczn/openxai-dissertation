@@ -1,6 +1,6 @@
 # Explainers
 from openxai.explainers import Gradient, IntegratedGradients,\
-    InputTimesGradient, SmoothGrad, LIME, SHAPExplainerC, RandomBaseline, PFI
+    InputTimesGradient, SmoothGrad, LIME, SHAPExplainerC, RandomBaseline, PFI, PDP
 
 explainers_dict = {
     'grad': Gradient,
@@ -10,7 +10,8 @@ explainers_dict = {
     'shap': SHAPExplainerC,
     'lime': LIME,
     'control': RandomBaseline,
-    'pfi': PFI
+    'pfi': PFI,
+    'pdp': PDP
 }
 
 def Explainer(method, model, param_dict={}):
@@ -24,7 +25,7 @@ def Explainer(method, model, param_dict={}):
     if method not in explainers_dict.keys():
         raise NotImplementedError("This method has not been implemented, yet.")
     
-    if method in ['lime', 'ig'] and param_dict == {}:
+    if method in ['lime', 'ig', 'pdp'] and param_dict == {}:
         raise ValueError(f"Please provide training data for {method} using param_dict = openxai.experiment_utils.fill_param_dict('{method}'" + ", {}, X_train)")
     
     explainer = explainers_dict[method](model, **param_dict)
