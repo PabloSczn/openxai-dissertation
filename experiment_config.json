@@ -7,7 +7,7 @@
     "gmsc", "heart", "heloc", "pima", "synthetic"
     ],
     "methods": [
-        "lime", "shap", "pfi"
+        "lime", "shap", "pfi", "pdp"
     ],
     "metrics": [
         "PRA", "RC",
@@ -21,6 +21,9 @@
             "n_repeats": 5,
             "seed": 0,
             "metric": "accuracy"
+        },
+        "pdp": {
+            "grid_resolution": 100
         },
         "control": {
             "seed": 0

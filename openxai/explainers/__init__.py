@@ -7,5 +7,6 @@ from .catalog import (
     LIME,
     SHAPExplainerC,
     RandomBaseline,
-    PFI
+    PFI,
+    PDP
 )

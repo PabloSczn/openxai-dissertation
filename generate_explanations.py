@@ -31,7 +31,14 @@ if __name__ == '__main__':
             utils.make_directory(folder_name)
             print(f"Data: {data_name}, Model: {model_name}")
 
-            X_train, X_test, y_train, y_test = ReturnTrainTestX(data_name, n_test=n_test_samples, float_tensor=True, return_labels=True)
+            X_train, X_test, y_train, y_test, feature_metadata = ReturnTrainTestX(
+                data_name,
+                n_test=n_test_samples,
+                float_tensor=True,
+                return_labels=True,
+                return_feature_metadata=True
+            )
+
             model = LoadModel(data_name, model_name, pretrained=pretrained)
             predictions = model(X_test).argmax(dim=-1)
 
@@ -44,11 +51,16 @@ if __name__ == '__main__':
             for method in methods:
                 print(f'Computing explanations for {method} (elapsed time: {time.time() - start_time:.2f}s)')
                 param_dict = utils.fill_param_dict(method, config['explainers'][method], X_train)
-                
+
                 if method == 'pfi':
                     # PFI needs inputs and labels
                     param_dict['inputs'] = X_test
                     param_dict['labels'] = torch.tensor(y_test)
+
+                if method == 'pdp':
+                    # PDP requires the full dataset
+                    param_dict['inputs'] = X_train  # Use training data for PDP
+                    param_dict['grid_resolution'] = config['explainers'][method].get('grid_resolution', 100)
                 
                 explainer = Explainer(method, model, param_dict)
                 explanations = explainer.get_explanations(X_test, predictions).detach().numpy()
