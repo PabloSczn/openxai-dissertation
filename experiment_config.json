@@ -3,8 +3,8 @@
         "lr", "ann"
     ],
     "data_names": [
-    "adult", "compas", "gaussian", "german",
-    "gmsc", "heart", "heloc", "pima", "synthetic"
+    "german",
+    "heloc", "synthetic"
     ],
     "methods": [
         "lime", "shap", "pfi", "pdp"
