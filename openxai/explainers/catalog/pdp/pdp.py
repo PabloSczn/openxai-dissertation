@@ -78,7 +78,7 @@ class PDP(BaseExplainer):
         for val in grid:
             inputs_copy[:, feature_idx] = val
             outputs = self.model(inputs_copy.float())
-            # Assuming binary classification, we take the probability of the positive class
+            # We take the probability of the positive class
             preds = outputs[:, 1]
             pdp_values.append(preds.mean().item())
         return torch.tensor(pdp_values)
