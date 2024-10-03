@@ -43,8 +43,8 @@ lr,heloc,lime,SA,0.9099133333333335,0.003074828493862165,_k_0.25_AUC_True
 lr,heloc,lime,SRA,0.6821699999999999,0.010197035080518913,_k_0.25_AUC_True
 lr,heloc,lime,PGU,0.07345427028237084,0.0021969878161130687,_k_0.25_AUC_True_std_0.1_n_samples_100_seed_-1_n_jobs_-1
 lr,heloc,lime,PGI,0.07631576814127469,0.0022707652598366423,_k_0.25_AUC_True_std_0.1_n_samples_100_seed_-1_n_jobs_-1
-lr,heloc,lime,RIS,16941.501953125,567.6660214680253,_std_1e-05_n_samples_1000_n_perturbations_100_p_norm_2_seed_-1_n_jobs_-1
-lr,heloc,lime,ROS,271755.1875,9161.332823461626,_std_1e-05_n_samples_1000_n_perturbations_100_p_norm_2_seed_-1_n_jobs_-1
+lr,heloc,lime,RIS,9.73752,6.34153,_std_1e-05_n_samples_1000_n_perturbations_100_p_norm_2_seed_-1_n_jobs_-1
+lr,heloc,lime,ROS,12.5126,9.12274,_std_1e-05_n_samples_1000_n_perturbations_100_p_norm_2_seed_-1_n_jobs_-1
 lr,heloc,shap,PRA,0.6038063241106719,0.002325826955624979,
 lr,heloc,shap,RC,0.28574505928853755,0.0064056044758082934,
 lr,heloc,shap,FA,0.19457999999999998,0.00386586216343349,_k_0.25_AUC_True
@@ -53,8 +53,8 @@ lr,heloc,shap,SA,0.1945633333333333,0.003866420737868839,_k_0.25_AUC_True
 lr,heloc,shap,SRA,0.03046666666666667,0.002381433741817451,_k_0.25_AUC_True
 lr,heloc,shap,PGU,0.09595602865809548,0.0026925925540725237,_k_0.25_AUC_True_std_0.1_n_samples_100_seed_-1_n_jobs_-1
 lr,heloc,shap,PGI,0.044917969274518396,0.001466771463909659,_k_0.25_AUC_True_std_0.1_n_samples_100_seed_-1_n_jobs_-1
-lr,heloc,shap,RIS,16257.7802734375,246.6310066569937,_std_1e-05_n_samples_1000_n_perturbations_100_p_norm_2_seed_-1_n_jobs_-1
-lr,heloc,shap,ROS,173066.34375,5234.695100783334,_std_1e-05_n_samples_1000_n_perturbations_100_p_norm_2_seed_-1_n_jobs_-1
+lr,heloc,shap,RIS,9.69632,5.50789,_std_1e-05_n_samples_1000_n_perturbations_100_p_norm_2_seed_-1_n_jobs_-1
+lr,heloc,shap,ROS,12.0614,8.56306,_std_1e-05_n_samples_1000_n_perturbations_100_p_norm_2_seed_-1_n_jobs_-1
 lr,heloc,pfi,PRA,0.616600790513834,0.0,
 lr,heloc,pfi,RC,0.3153079225871696,0.0,
 lr,heloc,pfi,FA,0.18999999999999997,0.0,_k_0.25_AUC_True
