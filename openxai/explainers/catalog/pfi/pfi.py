@@ -58,11 +58,12 @@ class PFI(BaseExplainer):
         :param label: Not used in PFI.
         :return: A torch.FloatTensor containing the feature importance scores.
         """
-        # Since PFI is a global method, we will return the same importance scores for each instance in x
+        # PFI is a global method, so the same importance scores are returned for each instance in x
         n_features = self.inputs.shape[1]
         importance_scores = np.zeros(n_features)
         rng = np.random.default_rng(self.seed)
 
+        # Loop over each feature and compute the impact on performance when shuffled
         for feature_idx in range(n_features):
             performance_decreases = []
             for _ in range(self.n_repeats):
